@@ -1,0 +1,57 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+.pnpm-debug.log
+
+# Build output
+dist/
+build/
+.next/
+.cache/
+.out/
+coverage/
+
+# Prisma
+prisma/migrations/
+*.db-journal
+*.sqlite
+*.sqlite-journal
+
+# Environment & credentials
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs/
+*.log
+*.log.*
+lerna-debug.log*
+
+# Editor / OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.iml
+
+# Test
+jest-html-reporters-*.html
+test-report.xml
+
+# Uploads (if you store QR codes, receipts, images, etc. locally)
+uploads/
+tmp/
+
+# Misc
+*.tgz
+
