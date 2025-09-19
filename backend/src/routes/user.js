@@ -1,5 +1,6 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export default function (prisma) {
   const router = express.Router();
@@ -9,7 +10,7 @@ export default function (prisma) {
       const { name, email, password, role } = req.body;
 
       const oldUser = await prisma.user.findUnique({
-        where: { email: email },
+        where: { email },
       });
 
       if (oldUser) {
@@ -36,17 +37,32 @@ export default function (prisma) {
       const { email, password } = req.body;
 
       const oldUser = await prisma.user.findUnique({
-        where: { email: email },
+        where: { email },
       });
       if (!oldUser) {
         return res.status(400).json({ success: false, error: "Check email" });
       }
-      const passwordCompare = bcrypt.compare(password, oldUser.password);
-      if (passwordCompare) {
+      const passwordCompare = await bcrypt.compare(password, oldUser.password);
+      if (!passwordCompare) {
         return res
           .status(400)
           .json({ success: false, error: "password mismatch" });
       }
+
+      const token = jwt.sign(
+        {
+          id: oldUser.id,
+          role: oldUser.role,
+          email: oldUser.email,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1hr",
+        }
+      );
+      res
+        .status(201)
+        .json({ success: true, message: "Token successfuly created", token });
     } catch (err) {
       console.error("Server error", err);
       return res.status(500).json({ success: false, error: err.message });
