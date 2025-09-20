@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { TailSpin } from "react-loader-spinner";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -9,7 +10,7 @@ const Register = () => {
   });
   const [error, setError] = useState(null);
   const [status, setStatus] = useState(null);
-  const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (status || error) {
@@ -30,6 +31,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const data = await fetch("http://localhost:3000/signup", {
         method: "POST",
@@ -62,6 +64,8 @@ const Register = () => {
       });
     } catch (err) {
       console.error("");
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -171,8 +175,22 @@ const Register = () => {
           <button
             type="submit"
             className="w-full py-3 px-4 bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold rounded-lg shadow-md hover:from-teal-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition duration-300"
+            disabled={loading}
           >
-            Create Account
+            {loading ? (
+              <>
+                <TailSpin
+                  height="20"
+                  width="20"
+                  color="#ffffff"
+                  ariaLabel="loading"
+                  visible={true}
+                />
+                <span className="ml-2">creating.....</span>
+              </>
+            ) : (
+              "Create Account"
+            )}
           </button>
         </form>
 
