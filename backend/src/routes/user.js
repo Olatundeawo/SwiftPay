@@ -40,12 +40,12 @@ export default function (prisma) {
         where: { email },
       });
       if (!oldUser) {
-        return res.status(400).json({ success: false, error: "Check email" });
+        return res.status(409).json({ success: false, error: "Check email" });
       }
       const passwordCompare = await bcrypt.compare(password, oldUser.password);
       if (!passwordCompare) {
         return res
-          .status(400)
+          .status(409)
           .json({ success: false, error: "password mismatch" });
       }
 
