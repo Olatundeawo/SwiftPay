@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
+import cors from "cors";
 import user from "./routes/user.js";
 import authMiddleware from "./middleware/authMiddleware.js";
 
@@ -11,6 +12,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const prisma = new PrismaClient();
+
+app.use(cors());
 
 app.use("/", user(prisma));
 app.get("/dashboard", authMiddleware, (req, res) => {
