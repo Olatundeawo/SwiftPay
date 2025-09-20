@@ -14,7 +14,7 @@ export default function (prisma) {
       });
 
       if (oldUser) {
-        return res.status(400).json({
+        return res.status(409).json({
           success: false,
           error: "Email already registered, try another email",
         });
