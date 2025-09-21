@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TailSpin } from "react-loader-spinner";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -78,7 +79,9 @@ const Register = () => {
       <div className="relative w-full sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-1/3 bg-white/95 backdrop-blur-sm shadow-xl rounded-2xl p-8 z-10">
         {/* Branding */}
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-extrabold text-yellow-300">SwiftPay</h1>
+          <h1 className="text-3xl font-extrabold text-yellow-300">
+            <Link to="/">SwiftPay</Link>
+          </h1>
           <p className="text-gray-500 text-sm mt-1">Secure Digital Payments</p>
         </div>
 
