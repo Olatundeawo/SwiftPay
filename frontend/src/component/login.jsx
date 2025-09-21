@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { TailSpin } from "react-loader-spinner";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -9,6 +11,7 @@ const Login = () => {
   const [status, setStatus] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (status || error) {
@@ -43,6 +46,9 @@ const Login = () => {
       });
       const response = await data.json();
       localStorage.setItem("token", response.token);
+      if (response.role === "USER") navigate("/user");
+      else if (response.role === "MERCHANT") navigate("/merchant");
+
       console.log(response);
       if (!data.ok) {
         setError(response.error);
@@ -69,7 +75,7 @@ const Login = () => {
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
         {/* Header */}
         <h2 className="text-3xl font-bold text-center text-yellow-400">
-          SwiftPay
+          <Link to="/">SwiftPay</Link>
         </h2>
         <p className="text-center text-gray-500 mb-6">
           Secure Digital Payments
