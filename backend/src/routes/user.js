@@ -54,15 +54,19 @@ export default function (prisma) {
           id: oldUser.id,
           role: oldUser.role,
           email: oldUser.email,
+          wallet: oldUser.walletBalance,
         },
         process.env.JWT_SECRET,
         {
           expiresIn: "1hr",
         }
       );
-      res
-        .status(201)
-        .json({ success: true, message: "Token successfuly created", token });
+      res.status(201).json({
+        success: true,
+        message: "Token successfuly created",
+        token,
+        role: oldUser.role,
+      });
     } catch (err) {
       console.error("Server error", err);
       return res.status(500).json({ success: false, error: err.message });
