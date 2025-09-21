@@ -20,6 +20,7 @@ model User {
   password              String
   role                  Role              @default(USER)
   walletBalance         Float             @default(0.0)
+  qrCodes               MerchantQR[]
   sentTxs               Transaction[]     @relation("UserTransactions")
   receiveTxs            Transaction[]     @relation("MerchantTransactions")
   createdAt             DateTime          @default(now())
@@ -38,6 +39,25 @@ model Transaction {
 
   createdAt             DateTime           @default(now())
 }
+
+model MerchantQR {
+  id                    String              @id @default(cuid())
+  merchantId            String
+  amount                Float?
+  qrString              String
+  status                QRStatus             @default(PENDING)
+  createdAt             DateTime             @default(now())
+
+  merchant              User                 @relation(fields: [merchantId], references: [id])
+}
+
+
+enum QRStatus {
+  PENDING
+  USED
+  EXPIRED
+}
+
 
 enum Role {
   USER
