@@ -23,7 +23,7 @@ const Merchant = () => {
   }, []);
   return (
     <div>
-      <p>This is the Merchant Dashboard, welcome {user.name}.</p>
+      <p>This is the Merchant Dashboard, welcome {user.name}</p>
       <p> your balance is {user.walletBalance}</p>
     </div>
   );
