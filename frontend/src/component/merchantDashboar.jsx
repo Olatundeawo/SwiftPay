@@ -2,6 +2,11 @@ import { useState, useEffect } from "react";
 
 const Merchant = () => {
   const [user, setUser] = useState("");
+  const [code, setCode] = useState(false);
+  const [amount, setAmount] = useState("");
+  const [error, setError] = useState("");
+  const [image, setImage] = useState("");
+  const [QRImages, setQRImages] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,10 +26,192 @@ const Merchant = () => {
     };
     fetchData();
   }, []);
+
+  const generateQR = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      const qrCode = await fetch("http://localhost:3000/dashboard/qr", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount: Number(amount) }),
+      });
+      const response = await qrCode.json();
+      console.log("This is first request", qrCode);
+      console.log("This is with json", response);
+      console.log(amount);
+      if (!qrCode.ok) {
+        setError(response.error);
+        setAmount("");
+      }
+      setImage(response.qrcode);
+      setAmount("");
+    } catch (err) {
+      setError(err.error);
+    }
+  };
+
+  const getAllQR = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      const allQR = await fetch("http://localhost:3000/dashboard/qr", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const response = await allQR.json();
+      if (!allQR.ok) {
+        setError(response.error);
+      }
+      console.log(response);
+      setQRImages(response.qrcode);
+    } catch (err) {
+      setError(err);
+    }
+  };
+
   return (
-    <div>
-      <p>This is the Merchant Dashboard, welcome {user.name}</p>
-      <p> your balance is {user.walletBalance}</p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center p-6 md:p-10">
+      {/* Welcome + Balance */}
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-2xl p-8 mb-6 border border-gray-100">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <p className="text-2xl font-semibold text-gray-800">
+              Welcome <span className="text-indigo-600">{user.name}</span>
+            </p>
+            <p className="text-lg text-gray-600 mt-2">
+              Your Balance:
+              <span className="ml-2 text-3xl font-extrabold text-green-600">
+                ₦{user.walletBalance}
+              </span>
+            </p>
+            <p>Merchant Id: {user.id}</p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button
+              type="submit"
+              onClick={() => setCode(true)}
+              className="px-6 py-3 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition w-full sm:w-auto font-medium"
+            >
+              Generate New QR Code
+            </button>
+            <button
+              onClick={getAllQR}
+              className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl shadow hover:bg-gray-200 transition w-full sm:w-auto font-medium"
+            >
+              Get all QR Codes
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* QR Code Generation */}
+      {code && (
+        <div className="w-full max-w-4xl bg-white shadow-lg rounded-2xl p-8 mb-6 border border-gray-100">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+            Generate a QR Code
+          </h2>
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <input
+              type="text"
+              name="amount"
+              value={amount}
+              onChange={(e) => {
+                let va = parseFloat(e.target.value);
+                if (Number.isInteger(va)) {
+                  setAmount(va);
+                } else {
+                  setAmount("");
+                  setError("Please enter a valid digit");
+                }
+              }}
+              placeholder="Enter Amount in ₦"
+              className="w-full md:flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm"
+            />
+            <button
+              type="submit"
+              onClick={generateQR}
+              className="px-6 py-3 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 transition w-full md:w-auto font-medium"
+            >
+              Generate QR Code
+            </button>
+          </div>
+
+          {image && (
+            <div className="flex flex-col items-center mt-6">
+              <img
+                src={image}
+                alt="Generated QR"
+                className="w-44 h-44 rounded-lg border shadow-sm"
+              />
+              <a
+                href={image}
+                download={`qrcode_${amount}.png`}
+                className="mt-3 px-6 py-2 bg-blue-600 text-white text-sm rounded-lg shadow hover:bg-blue-700 transition font-medium"
+              >
+                Download QR Code
+              </a>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* QR Code List */}
+      {QRImages && (
+        <div className="w-full max-w-4xl bg-white shadow-lg rounded-2xl p-8 border border-gray-100">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+            Generated QR Codes
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...QRImages].reverse().map((images) => (
+              <div
+                key={images.id}
+                className="bg-gray-50 rounded-xl p-4 shadow hover:shadow-md transition flex flex-col items-center border border-gray-200"
+              >
+                <img
+                  src={images.qrConvert}
+                  alt="QR"
+                  className="w-32 h-32 mb-3 rounded-md border shadow-sm"
+                />
+                <p className="text-gray-700 font-medium">
+                  Amount: ₦{images.amount}
+                </p>
+                <p
+                  className={`mt-1 font-semibold ${
+                    images.status === "active"
+                      ? "text-green-600"
+                      : "text-red-500"
+                  }`}
+                >
+                  Status: {images.status}
+                </p>
+                <p className="text-gray-500 text-sm mt-1">
+                  {new Date(images.createdAt).toLocaleString()}
+                </p>
+                <a
+                  href={images.qrConvert}
+                  download={`qrcode_${images.amount}.png`}
+                  className="mt-3 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg shadow hover:bg-blue-700 transition font-medium"
+                >
+                  Download
+                </a>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => setQRImages("")}
+            className="mt-6 px-6 py-3 bg-red-500 text-white rounded-xl shadow hover:bg-red-600 transition font-medium"
+          >
+            Clear
+          </button>
+        </div>
+      )}
     </div>
   );
 };
