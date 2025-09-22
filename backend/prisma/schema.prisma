@@ -28,17 +28,21 @@ model User {
 }
 
 model Transaction {
-  id                    String            @id @default(cuid())
-  amount                Float
+  id          String   @id @default(cuid())
+  amount      Decimal  @db.Decimal(10,2)
 
-  user                  User              @relation("UserTransactions", fields: [userId], references: [id])
-  userId                String
+  user        User     @relation("UserTransactions", fields: [userId], references: [id])
+  userId      String
 
-  Merchant              User              @relation("MerchantTransactions", fields: [merchantId], references: [id])
-  merchantId            String
+  merchant    User     @relation("MerchantTransactions", fields: [merchantId], references: [id])
+  merchantId  String
 
-  createdAt             DateTime           @default(now())
+  status       String   @default("success")
+  paymentMethod String? // e.g. "wallet", "card"
+
+  createdAt   DateTime @default(now())
 }
+
 
 model MerchantQR {
   id                    String              @id @default(cuid())

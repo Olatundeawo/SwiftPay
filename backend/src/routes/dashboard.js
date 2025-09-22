@@ -7,12 +7,12 @@ export default function (prisma) {
 
   router.get("/", async (req, res) => {
     try {
-      // Only allow merchants
-      if (req.user.role !== "MERCHANT") {
-        return res
-          .status(403)
-          .json({ success: false, error: "Not authorized" });
-      }
+      //   // Only allow merchants
+      //   if (req.user.role !== "MERCHANT") {
+      //     return res
+      //       .status(403)
+      //       .json({ success: false, error: "Not authorized" });
+      //   }
 
       // Fetch user details (exclude password for safety)
       const user = await prisma.user.findUnique({
@@ -89,6 +89,7 @@ export default function (prisma) {
           amount: true,
           status: true,
           createdAt: true,
+          qrString: true,
         },
       });
 
@@ -98,9 +99,19 @@ export default function (prisma) {
           .json({ success: false, error: "No QRCode created yet" });
       }
 
+      const qrImages = await Promise.all(
+        qrRecord.map(async (record) => {
+          const qrConvert = await QRCode.toDataURL(record.qrString);
+          return {
+            ...record,
+            qrConvert,
+          };
+        })
+      );
+
       return res
         .status(200)
-        .json({ success: true, message: "QRCode", qrRecord });
+        .json({ success: true, message: "QRCode", qrcode: qrImages, qrRecord });
     } catch (err) {
       return res.status(500).json({ Error: err });
     }

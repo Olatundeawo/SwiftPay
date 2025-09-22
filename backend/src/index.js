@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import cors from "cors";
 import user from "./routes/user.js";
 import dashboard from "./routes/dashboard.js";
+import payments from "./routes/payments.js";
 import authMiddleware from "./middleware/authMiddleware.js";
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(cors());
 
 app.use("/", user(prisma));
 app.use("/dashboard", authMiddleware, dashboard(prisma));
+app.use("/api", authMiddleware, payments(prisma));
 // app.get("/dashboard", authMiddleware, (req, res) => {
 //   res.json({
 //     message: `Welcome to the ${req.user.role} dashboard, your email is ${req.user.email}`,
