@@ -49,7 +49,6 @@ const Login = () => {
       if (response.role === "USER") navigate("/user");
       else if (response.role === "MERCHANT") navigate("/merchant");
 
-      console.log(response);
       if (!data.ok) {
         setError(response.error);
         setUser({
