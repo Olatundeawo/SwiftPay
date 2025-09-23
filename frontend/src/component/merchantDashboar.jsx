@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Merchant = () => {
   const [user, setUser] = useState("");
@@ -7,6 +8,7 @@ const Merchant = () => {
   const [error, setError] = useState("");
   const [image, setImage] = useState("");
   const [QRImages, setQRImages] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,11 +78,17 @@ const Merchant = () => {
     }
   };
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center p-6 md:p-10">
       {/* Welcome + Balance */}
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-2xl p-8 mb-6 border border-gray-100">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          {/* User Info */}
           <div>
             <p className="text-2xl font-semibold text-gray-800">
               Welcome <span className="text-indigo-600">{user.name}</span>
@@ -88,12 +96,14 @@ const Merchant = () => {
             <p className="text-lg text-gray-600 mt-2">
               Your Balance:
               <span className="ml-2 text-3xl font-extrabold text-green-600">
-                ₦{user.walletBalance}
+                ₦{user.walletBalance?.toLocaleString()}
               </span>
             </p>
-            <p>Merchant Id: {user.id}</p>
+            <p className="text-sm text-gray-500 mt-1">Merchant Id: {user.id}</p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4">
+
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <button
               type="submit"
               onClick={() => setCode(true)}
@@ -106,6 +116,12 @@ const Merchant = () => {
               className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl shadow hover:bg-gray-200 transition w-full sm:w-auto font-medium"
             >
               Get all QR Codes
+            </button>
+            <button
+              onClick={logout}
+              className="px-6 py-3 bg-red-50 text-red-600 rounded-xl shadow hover:bg-red-100 transition w-full sm:w-auto font-medium"
+            >
+              Logout
             </button>
           </div>
         </div>
@@ -180,7 +196,7 @@ const Merchant = () => {
                   className="w-32 h-32 mb-3 rounded-md border shadow-sm"
                 />
                 <p className="text-gray-700 font-medium">
-                  Amount: ₦{images.amount}
+                  Amount: ₦{images.amount.toLocaleString()}
                 </p>
                 <p
                   className={`mt-1 font-semibold ${
