@@ -5,6 +5,7 @@ import Login from "./login";
 import LandingPage from "./landingPage";
 import User from "./userDashboard";
 import Merchant from "./merchantDashboar";
+import About from "./about";
 
 const Routing = () => {
   return (
@@ -16,6 +17,7 @@ const Routing = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/user" element={<User />} />
           <Route path="/merchant" element={<Merchant />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </Router>
     </div>

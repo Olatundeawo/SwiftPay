@@ -17,12 +17,16 @@ const LandingPage = () => {
               fast, secure, and trusted by thousands of users.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button className="bg-yellow-300 text-gray-900 px-6 py-3 rounded-lg font-semibold shadow hover:bg-yellow-400 transition">
-                <Link to="/signup"> Get Started</Link>
-              </button>
-              <button className="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-indigo-700 transition">
-                Learn More
-              </button>
+              <Link to="/signup">
+                <button className="bg-yellow-300 text-gray-900 px-6 py-3 rounded-lg font-semibold shadow hover:bg-yellow-400 transition">
+                  Get Started
+                </button>
+              </Link>
+              <Link to="/about">
+                <button className="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-indigo-700 transition">
+                  Learn More
+                </button>
+              </Link>
             </div>
           </div>
 
