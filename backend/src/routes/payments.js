@@ -6,16 +6,20 @@ export default function (prisma) {
   router.post("/payment", async (req, res) => {
     try {
       const { id } = req.user;
-      const { merchantId, amount } = req.body;
+      const { merchantId, qrId, amount } = req.body;
 
-      console.log("userId", req.user.id);
-
-      if (!id || !merchantId || !amount) {
+      if (!id || !merchantId || !qrId || !amount) {
         return res.status(400).json({
           success: false,
-          error: "userId, merchantId, and amount are required",
+          error: "userId, merchantId, qrId, and amount are required",
         });
       }
+      const merchantQR = await prisma.merchantQR.findUnique({
+        where: {
+          qrId: qrId,
+        },
+        select: { status: true },
+      });
 
       const user = await prisma.user.findUnique({
         where: { id: id },
@@ -44,7 +48,14 @@ export default function (prisma) {
           .json({ success: false, error: "Insufficient funds." });
       }
 
-      const [updatedUser, updatedMerchant, transaction] =
+      if (merchantQR.status === "USED") {
+        return res.status(400).json({
+          success: true,
+          message: "Transaction has been completed",
+        });
+      }
+
+      const [updatedUser, updatedMerchant, updatedQRCode, transaction] =
         await prisma.$transaction([
           prisma.user.update({
             where: { id: id },
@@ -57,6 +68,11 @@ export default function (prisma) {
             data: {
               walletBalance: { increment: amount },
             },
+          }),
+
+          prisma.merchantQR.update({
+            where: { qrId: qrId },
+            data: { status: "USED" },
           }),
 
           prisma.transaction.create({
