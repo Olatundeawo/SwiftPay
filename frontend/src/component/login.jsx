@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { TailSpin } from "react-loader-spinner";
+import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +11,8 @@ const Login = () => {
   const [status, setStatus] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [load, setLoad] = useState(true);
+  let [color, setColor] = useState("#ffffff");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -131,12 +133,13 @@ const Login = () => {
           >
             {loading ? (
               <>
-                <TailSpin
-                  height="20"
-                  width="20"
-                  color="#ffffff"
-                  ariaLabel="loading"
-                  visible={true}
+                <ClipLoader
+                  color={color}
+                  loading={load}
+                  // cssOverride={override}
+                  size={20}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
                 />
                 <span className="ml-2">Login...</span>
               </>
