@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TailSpin } from "react-loader-spinner";
+import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 
 const Register = () => {
@@ -12,6 +12,8 @@ const Register = () => {
   const [error, setError] = useState(null);
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [load, setLoad] = useState(true);
+  const [color, setColor] = useState("#ffffff");
 
   useEffect(() => {
     if (status || error) {
@@ -182,12 +184,13 @@ const Register = () => {
           >
             {loading ? (
               <>
-                <TailSpin
-                  height="20"
-                  width="20"
-                  color="#ffffff"
-                  ariaLabel="loading"
-                  visible={true}
+                <ClipLoader
+                  color={color}
+                  loading={load}
+                  // cssOverride={override}
+                  size={20}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
                 />
                 <span className="ml-2">creating.....</span>
               </>
