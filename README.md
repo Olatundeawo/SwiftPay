@@ -1,4 +1,4 @@
-# PayWave – QR-Based Fintech Payment App
+# SwifyPay – QR-Based Fintech Payment App
 
 SwifyPay is a fintech web application that enables seamless cashless transactions between **users** and **merchants** using QR codes.  
 Users can pay by scanning merchant-generated QR codes, while merchants can track sales and receive payments instantly.
