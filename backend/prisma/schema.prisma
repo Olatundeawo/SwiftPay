@@ -48,6 +48,7 @@ model MerchantQR {
   id                    String              @id @default(cuid())
   merchantId            String
   amount                Float?
+  qrId                  String              @unique
   qrString              String
   status                QRStatus             @default(PENDING)
   createdAt             DateTime             @default(now())
