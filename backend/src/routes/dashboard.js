@@ -52,9 +52,10 @@ export default function (prisma) {
       if (req.user.role !== "MERCHANT") {
         return res.status(404).json({ success: false, error: "Access denied" });
       }
+      const qrId = crypto.randomUUID();
 
       const qrdata = JSON.stringify({
-        qrId: crypto.randomUUID(),
+        qrId: qrId,
         merchantId: id,
         amount: amount || null,
         date: new Date().toISOString(),
@@ -66,6 +67,7 @@ export default function (prisma) {
         data: {
           merchantId: id,
           amount: amount,
+          qrId: qrId,
           qrString: qrdata,
         },
       });
