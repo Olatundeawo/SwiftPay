@@ -8,6 +8,7 @@ const Merchant = () => {
   const [error, setError] = useState("");
   const [image, setImage] = useState("");
   const [QRImages, setQRImages] = useState("");
+  const [data, setData] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +28,7 @@ const Merchant = () => {
       }
     };
     fetchData();
+    getTransaction();
   }, []);
 
   const generateQR = async (e) => {
@@ -42,6 +44,7 @@ const Merchant = () => {
         body: JSON.stringify({ amount: Number(amount) }),
       });
       const response = await qrCode.json();
+
       console.log("This is first request", qrCode);
       console.log("This is with json", response);
       console.log(amount);
@@ -68,6 +71,7 @@ const Merchant = () => {
         },
       });
       const response = await allQR.json();
+      console.log(token);
       if (!allQR.ok) {
         setError(response.error);
       }
@@ -77,6 +81,37 @@ const Merchant = () => {
       setError(err);
     }
   };
+
+  const getTransaction = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const transaction = await fetch(
+        "http://localhost:3000/transaction/details",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const response = await transaction.json();
+      if (!transaction.ok) {
+        setError(response.error);
+      }
+
+      setData(response.receiveTxs);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setStatus(false);
+    }
+  };
+
+  const transactions = Array.isArray(data)
+    ? [...data]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 5)
+    : [];
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -125,6 +160,50 @@ const Merchant = () => {
             </button>
           </div>
         </div>
+      </div>
+
+      <div className="bg-white shadow-md rounded-xl p-4 mt-6">
+        <h4 className="text-lg font-semibold text-gray-800 mb-4">
+          Recent Transactions
+        </h4>
+        {transactions.map((details, index) => (
+          <div className="overflow-x-auto" key={details.id}>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100 text-sm text-gray-600">
+                  <th className="p-3 text-left font-medium">No</th>
+                  <th className="p-3 text-left font-medium">Amount</th>
+                  <th className="p-3 text-left font-medium">Sender</th>
+                  <th className="p-3 text-left font-medium">Status</th>
+                  <th className="p-3 text-left font-medium">Date</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm divide-y divide-gray-200">
+                <tr>
+                  <td className="p-3 text-gray-600">{index + 1}</td>
+                  <td className="p-3 font-semibold text-gray-800">
+                    ₦{details.amount?.toLocaleString()}
+                  </td>
+                  <td className="p-3 text-gray-700">{details?.user?.name}</td>
+                  <td className="p-3">
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        details?.status === "Success"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {details?.status}
+                    </span>
+                  </td>
+                  <td className="p-3 text-gray-500">
+                    {new Date(details?.createdAt).toLocaleDateString()}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        ))}
       </div>
 
       {/* QR Code Generation */}
@@ -200,9 +279,7 @@ const Merchant = () => {
                 </p>
                 <p
                   className={`mt-1 font-semibold ${
-                    images.status === "active"
-                      ? "text-green-600"
-                      : "text-red-500"
+                    images.status === "USED" ? "text-green-600" : "text-red-500"
                   }`}
                 >
                   Status: {images.status}
