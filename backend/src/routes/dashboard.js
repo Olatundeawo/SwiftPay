@@ -49,6 +49,13 @@ export default function (prisma) {
       const { id } = req.user;
       const { amount } = req.body;
 
+      const merchant = await prisma.user.findUnique({
+        where: { id: id },
+        select: {
+          name: true,
+        },
+      });
+
       if (req.user.role !== "MERCHANT") {
         return res.status(404).json({ success: false, error: "Access denied" });
       }
@@ -57,6 +64,7 @@ export default function (prisma) {
       const qrdata = JSON.stringify({
         qrId: qrId,
         merchantId: id,
+        merchantName: merchant.name,
         amount: amount || null,
         date: new Date().toISOString(),
       });
@@ -66,6 +74,7 @@ export default function (prisma) {
       const qrRecord = await prisma.merchantQR.create({
         data: {
           merchantId: id,
+          merchantName: merchant.name,
           amount: amount,
           qrId: qrId,
           qrString: qrdata,
