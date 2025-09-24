@@ -34,12 +34,27 @@ Users can pay by scanning merchant-generated QR codes, while merchants can track
 
 ---
 
-## 📸 Screenshots (Coming Soon)
+## 📸 Screenshots
 
-- Landing Page
-- User Dashboard
-- Merchant Dashboard
-- QR Payment Flow
+### Landing Page
+
+![Landing page](/frontend/public/dashboard.png)
+
+### User Dashboard
+
+![User Dashboard](/frontend/public/user.png)
+
+### Merchant Dashboard
+
+![Merchant Dashboard](/frontend/public/Merchant.png)
+
+### Login Page
+
+![Login page](/frontend//public/Login.png)
+
+### SignUp Page
+
+![SignUp page](/frontend/public/signup.png)
 
 ---
 
@@ -48,5 +63,5 @@ Users can pay by scanning merchant-generated QR codes, while merchants can track
 1. **Clone the repository**
    ```bash
    git clone https://github.com/your-username/swiftpay.git
-   cd paywave
+   cd swiftpay
    ```
