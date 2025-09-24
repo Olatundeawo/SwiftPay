@@ -66,7 +66,7 @@ const Login = () => {
       });
     } catch (err) {
       console.error("server error", err);
-      setError(err.error);
+      setError(`${err.message}, Checking your network connection.`);
     } finally {
       setLoading(false);
     }
