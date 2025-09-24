@@ -7,6 +7,7 @@ import User from "./userDashboard";
 import Merchant from "./merchantDashboar";
 import About from "./about";
 import PrivateRoute from "./authGuard";
+import Notfound from "../../../../frontend/src/components/Notfound";
 
 const Routing = () => {
   return (
@@ -33,6 +34,7 @@ const Routing = () => {
             }
           />
           <Route path="/about" element={<About />} />
+          <Route path="*" element={<Notfound />} />
         </Routes>
       </Router>
     </div>
