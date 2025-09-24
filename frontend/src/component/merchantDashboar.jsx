@@ -197,7 +197,14 @@ const Merchant = () => {
                     </span>
                   </td>
                   <td className="p-3 text-gray-500">
-                    {new Date(details?.createdAt).toLocaleDateString()}
+                    {new Date(details?.createdAt).toLocaleString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
                   </td>
                 </tr>
               </tbody>

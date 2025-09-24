@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
@@ -126,11 +126,12 @@ const User = () => {
       if (!result.ok) {
         setError(response.error);
         console.log(response.error);
+      } else {
+        setStatus(response.message);
+        fetchData();
       }
 
-      setStatus(response.message);
-      fetchData();
-      console.log(response.message);
+      // console.log(response.message);
     } catch (err) {
       console.log(err.message);
       setError(err.message);
@@ -295,7 +296,14 @@ const User = () => {
                         </span>
                       </td>
                       <td className="p-3 text-gray-500">
-                        {new Date(details?.createdAt).toLocaleDateString()}
+                        {new Date(details?.createdAt).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        })}
                       </td>
                     </tr>
                   </tbody>
@@ -355,7 +363,7 @@ const User = () => {
                 </span>{" "}
                 to{" "}
                 <span className="font-semibold text-gray-800">
-                  {dataQR.merchantId}
+                  {dataQR.merchantName}
                 </span>
                 . Press pay to proceed.
               </p>
@@ -383,9 +391,14 @@ const User = () => {
           )}
         </div>
       ) : (
-        <p className="text-red-500 font-medium text-center">
-          You are not authorized to visit this page.
-        </p>
+        <ClipLoader
+          color={color}
+          loading={load}
+          // cssOverride={override}
+          size={200}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
       )}
     </div>
   );

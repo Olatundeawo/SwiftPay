@@ -6,6 +6,7 @@ import LandingPage from "./landingPage";
 import User from "./userDashboard";
 import Merchant from "./merchantDashboar";
 import About from "./about";
+import PrivateRoute from "./authGuard";
 
 const Routing = () => {
   return (
@@ -15,8 +16,22 @@ const Routing = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/signup" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/user" element={<User />} />
-          <Route path="/merchant" element={<Merchant />} />
+          <Route
+            path="/user"
+            element={
+              <PrivateRoute>
+                <User />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/merchant"
+            element={
+              <PrivateRoute>
+                <Merchant />
+              </PrivateRoute>
+            }
+          />
           <Route path="/about" element={<About />} />
         </Routes>
       </Router>

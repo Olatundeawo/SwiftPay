@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -14,6 +15,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [load, setLoad] = useState(true);
   const [color, setColor] = useState("#ffffff");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (status || error) {
@@ -56,15 +58,16 @@ const Register = () => {
           password: "",
           role: "USER",
         });
+      } else {
+        setStatus(response.message);
+        setUser({
+          name: "",
+          email: "",
+          password: "",
+          role: "USER",
+        });
+        navigate("/login");
       }
-
-      setStatus(response.message);
-      setUser({
-        name: "",
-        email: "",
-        password: "",
-        role: "USER",
-      });
     } catch (err) {
       setError(`${err.message}, Check your internet connection.`);
     } finally {
