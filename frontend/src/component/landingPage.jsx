@@ -57,6 +57,7 @@ const LandingPage = () => {
                 <input
                   type="email"
                   placeholder="you@example.com"
+                  disabled
                   className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 />
               </div>
@@ -67,17 +68,18 @@ const LandingPage = () => {
                 <input
                   type="password"
                   placeholder="Enter your password"
+                  disabled
                   className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 />
               </div>
-              <button
-                type="text"
-                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold shadow-md hover:bg-indigo-700 transition"
-              >
-                <Link to="/login" className=" font-semibold">
+              <Link to="/login" className=" font-semibold">
+                <button
+                  type="text"
+                  className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold shadow-md hover:bg-indigo-700 transition"
+                >
                   Continue
-                </Link>
-              </button>
+                </button>
+              </Link>
             </div>
 
             {/* Extra Links */}
