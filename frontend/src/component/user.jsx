@@ -66,7 +66,7 @@ const Register = () => {
         role: "USER",
       });
     } catch (err) {
-      console.error("");
+      setError(`${err.message}, Check your internet connection.`);
     } finally {
       setLoading(false);
     }
