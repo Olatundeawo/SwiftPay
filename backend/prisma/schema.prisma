@@ -47,6 +47,7 @@ model Transaction {
 model MerchantQR {
   id                    String              @id @default(cuid())
   merchantId            String
+  merchantName          String
   amount                Float?
   qrId                  String              @unique
   qrString              String
