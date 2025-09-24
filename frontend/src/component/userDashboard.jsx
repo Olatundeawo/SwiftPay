@@ -14,6 +14,7 @@ const User = () => {
   const [scanner, setScanner] = useState(null);
   const [load, setLoad] = useState(true);
   const [color, setColor] = useState("#ffffff");
+  const [data, setData] = useState("");
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -25,6 +26,7 @@ const User = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const response = await data.json();
+      console.log(token);
       setUser(response.user);
     } catch (err) {
       console.error(err);
@@ -32,6 +34,7 @@ const User = () => {
   };
   useEffect(() => {
     fetchData();
+    getTransaction();
   }, []);
 
   useEffect(() => {
@@ -136,10 +139,42 @@ const User = () => {
     }
   };
 
+  const getTransaction = async (e) => {
+    try {
+      const token = localStorage.getItem("token");
+      const transaction = await fetch(
+        "http://localhost:3000/transaction/details",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const response = await transaction.json();
+
+      if (!transaction.ok) {
+        setError(response.error);
+      }
+      console.log(response.sentTxs.map((dat) => dat.merchant.name));
+      setStatus(response.message);
+      setData(response.sentTxs);
+      console.log("The our", typeof data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const logOut = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
+
+  const transactions = Array.isArray(data)
+    ? [...data]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 5)
+    : [];
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -152,6 +187,7 @@ const User = () => {
           >
             Logout
           </button>
+          <button onClick={getTransaction}>Transaction</button>
 
           {/* Welcome */}
           <div className="text-center">
@@ -171,7 +207,7 @@ const User = () => {
               Your Balance
             </span>
             <span className="text-2xl font-extrabold tracking-wide">
-              ₦{user.walletBalance.toLocaleString()}
+              ₦{user.walletBalance?.toLocaleString()}
             </span>
           </div>
 
@@ -222,6 +258,51 @@ const User = () => {
               </div>
             </div>
           )}
+          <div className="bg-white shadow-md rounded-xl p-4 mt-6">
+            <h4 className="text-lg font-semibold text-gray-800 mb-4">
+              Recent Transactions
+            </h4>
+            {transactions.map((details, index) => (
+              <div className="overflow-x-auto" key={details.id}>
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100 text-sm text-gray-600">
+                      <th className="p-3 text-left font-medium">No</th>
+                      <th className="p-3 text-left font-medium">Amount</th>
+                      <th className="p-3 text-left font-medium">Receiver</th>
+                      <th className="p-3 text-left font-medium">Status</th>
+                      <th className="p-3 text-left font-medium">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm divide-y divide-gray-200">
+                    <tr>
+                      <td className="p-3 text-gray-600">{index + 1}</td>
+                      <td className="p-3 font-semibold text-gray-800">
+                        ₦{details.amount?.toLocaleString()}
+                      </td>
+                      <td className="p-3 text-gray-700">
+                        {details?.merchant?.name}
+                      </td>
+                      <td className="p-3">
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            details?.status === "Success"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                        >
+                          {details?.status}
+                        </span>
+                      </td>
+                      <td className="p-3 text-gray-500">
+                        {new Date(details?.createdAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            ))}
+          </div>
 
           {/* QR Code Scanner */}
           <div className="p-4 border rounded-xl bg-gray-50 shadow-sm">
