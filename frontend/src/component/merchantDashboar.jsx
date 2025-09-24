@@ -162,57 +162,6 @@ const Merchant = () => {
         </div>
       </div>
 
-      <div className="bg-white shadow-md rounded-xl p-4 mt-6">
-        <h4 className="text-lg font-semibold text-gray-800 mb-4">
-          Recent Transactions
-        </h4>
-        {transactions.map((details, index) => (
-          <div className="overflow-x-auto" key={details.id}>
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-100 text-sm text-gray-600">
-                  <th className="p-3 text-left font-medium">No</th>
-                  <th className="p-3 text-left font-medium">Amount</th>
-                  <th className="p-3 text-left font-medium">Sender</th>
-                  <th className="p-3 text-left font-medium">Status</th>
-                  <th className="p-3 text-left font-medium">Date</th>
-                </tr>
-              </thead>
-              <tbody className="text-sm divide-y divide-gray-200">
-                <tr>
-                  <td className="p-3 text-gray-600">{index + 1}</td>
-                  <td className="p-3 font-semibold text-gray-800">
-                    ₦{details.amount?.toLocaleString()}
-                  </td>
-                  <td className="p-3 text-gray-700">{details?.user?.name}</td>
-                  <td className="p-3">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        details?.status === "Success"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {details?.status}
-                    </span>
-                  </td>
-                  <td className="p-3 text-gray-500">
-                    {new Date(details?.createdAt).toLocaleString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                    })}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        ))}
-      </div>
-
       {/* QR Code Generation */}
       {code && (
         <div className="w-full max-w-4xl bg-white shadow-lg rounded-2xl p-8 mb-6 border border-gray-100">
@@ -312,6 +261,57 @@ const Merchant = () => {
           </button>
         </div>
       )}
+
+      <div className="bg-white shadow-md rounded-xl p-4 mt-6">
+        <h4 className="text-lg font-semibold text-gray-800 mb-4">
+          Recent Transactions
+        </h4>
+        {transactions.map((details, index) => (
+          <div className="overflow-x-auto" key={details.id}>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100 text-sm text-gray-600">
+                  <th className="p-3 text-left font-medium">No</th>
+                  <th className="p-3 text-left font-medium">Amount</th>
+                  <th className="p-3 text-left font-medium">Sender</th>
+                  <th className="p-3 text-left font-medium">Status</th>
+                  <th className="p-3 text-left font-medium">Date</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm divide-y divide-gray-200">
+                <tr>
+                  <td className="p-3 text-gray-600">{index + 1}</td>
+                  <td className="p-3 font-semibold text-gray-800">
+                    ₦{details.amount?.toLocaleString()}
+                  </td>
+                  <td className="p-3 text-gray-700">{details?.user?.name}</td>
+                  <td className="p-3">
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        details?.status === "Success"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {details?.status}
+                    </span>
+                  </td>
+                  <td className="p-3 text-gray-500">
+                    {new Date(details?.createdAt).toLocaleString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
