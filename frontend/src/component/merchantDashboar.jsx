@@ -102,8 +102,6 @@ const Merchant = () => {
       setData(response.receiveTxs);
     } catch (err) {
       setError(err.message);
-    } finally {
-      setStatus(false);
     }
   };
 
@@ -126,15 +124,17 @@ const Merchant = () => {
           {/* User Info */}
           <div>
             <p className="text-2xl font-semibold text-gray-800">
-              Welcome <span className="text-indigo-600">{user.name}</span>
+              Welcome <span className="text-indigo-600">{user?.name}</span>
             </p>
             <p className="text-lg text-gray-600 mt-2">
               Your Balance:
               <span className="ml-2 text-3xl font-extrabold text-green-600">
-                ₦{user.walletBalance?.toLocaleString()}
+                ₦{user?.walletBalance?.toLocaleString()}
               </span>
             </p>
-            <p className="text-sm text-gray-500 mt-1">Merchant Id: {user.id}</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Merchant Id: {user?.id}
+            </p>
           </div>
 
           {/* Actions */}
