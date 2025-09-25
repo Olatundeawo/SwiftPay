@@ -40,7 +40,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const data = await fetch("http://localhost:3000/login", {
+      const data = await fetch("https://swiftpay-2tot.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

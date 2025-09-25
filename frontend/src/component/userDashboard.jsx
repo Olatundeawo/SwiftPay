@@ -21,7 +21,7 @@ const User = () => {
   const fetchData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const data = await fetch("http://localhost:3000/dashboard", {
+      const data = await fetch("https://swiftpay-2tot.onrender.com/dashboard", {
         method: "GET",
 
         headers: { Authorization: `Bearer ${token}` },
@@ -53,7 +53,7 @@ const User = () => {
     try {
       e.preventDefault();
       const token = localStorage.getItem("token");
-      const fund = await fetch("http://localhost:3000/api/fund", {
+      const fund = await fetch("https://swiftpay-2tot.onrender.com/api/fund", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -112,18 +112,21 @@ const User = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const result = await fetch("http://localhost:3000/api/payment", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          merchantId: dataQR.merchantId,
-          qrId: dataQR.qrId,
-          amount: dataQR.amount,
-        }),
-      });
+      const result = await fetch(
+        "https://swiftpay-2tot.onrender.com/api/payment",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            merchantId: dataQR.merchantId,
+            qrId: dataQR.qrId,
+            amount: dataQR.amount,
+          }),
+        }
+      );
 
       const response = await result.json();
       console.log(response);
@@ -148,7 +151,7 @@ const User = () => {
     try {
       const token = localStorage.getItem("token");
       const transaction = await fetch(
-        "http://localhost:3000/transaction/details",
+        "https://swiftpay-2tot.onrender.com/details",
         {
           method: "GET",
           headers: {
@@ -184,7 +187,6 @@ const User = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       {user ? (
         <div className="relative w-full max-w-md bg-white shadow-xl rounded-2xl p-6 space-y-6">
-          {/* Logout button (top-right corner) */}
           <button
             onClick={logOut}
             className="absolute top-4 right-4 px-3 py-1.5 text-sm bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition active:scale-95"
@@ -340,7 +342,6 @@ const User = () => {
                     <ClipLoader
                       color={color}
                       loading={load}
-                      // cssOverride={override}
                       size={20}
                       aria-label="Loading Spinner"
                       data-testid="loader"
@@ -409,7 +410,6 @@ const User = () => {
         </div>
       ) : (
         <div className="flex flex-col items-center space-y-4">
-          {/* Your image */}
           <img
             src={logo}
             alt="Loading..."

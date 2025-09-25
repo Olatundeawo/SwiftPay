@@ -17,7 +17,13 @@ app.use(express.urlencoded({ extended: false }));
 
 const prisma = new PrismaClient();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://swiftpay-3jzn.onrender.com"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.use("/", user(prisma));
 app.use("/dashboard", authMiddleware, dashboard(prisma));

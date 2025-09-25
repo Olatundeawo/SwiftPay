@@ -16,11 +16,14 @@ const Merchant = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const data = await fetch("http://localhost:3000/dashboard", {
-          method: "GET",
+        const data = await fetch(
+          "https://swiftpay-2tot.onrender.com/dashboard",
+          {
+            method: "GET",
 
-          headers: { Authorization: `Bearer ${token}` },
-        });
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         const response = await data.json();
 
         setUser(response.user);
@@ -37,14 +40,17 @@ const Merchant = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const qrCode = await fetch("http://localhost:3000/dashboard/qr", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ amount: Number(amount) }),
-      });
+      const qrCode = await fetch(
+        "https://swiftpay-2tot.onrender.com/dashboard/qr",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ amount: Number(amount) }),
+        }
+      );
       const response = await qrCode.json();
 
       console.log("This is first request", qrCode);
@@ -67,13 +73,16 @@ const Merchant = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const allQR = await fetch("http://localhost:3000/dashboard/qr", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const allQR = await fetch(
+        "https://swiftpay-2tot.onrender.com/dashboard/qr",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const response = await allQR.json();
       console.log(token);
       if (!allQR.ok) {
@@ -90,7 +99,7 @@ const Merchant = () => {
     try {
       const token = localStorage.getItem("token");
       const transaction = await fetch(
-        "http://localhost:3000/transaction/details",
+        "https://swiftpay-2tot.onrender.com/details",
         {
           method: "GET",
           headers: {

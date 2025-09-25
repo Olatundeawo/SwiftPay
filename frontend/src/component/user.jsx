@@ -22,7 +22,7 @@ const Register = () => {
       const timer = setTimeout(() => {
         setStatus("");
         setError("");
-      }, 5000); // hide after 5 seconds
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [status, error]);
@@ -38,7 +38,7 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const data = await fetch("http://localhost:3000/signup", {
+      const data = await fetch("https://swiftpay-2tot.onrender.com/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -76,13 +76,10 @@ const Register = () => {
   };
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 px-4">
-      {/* Optional Decorative Shapes */}
       <div className="absolute -top-32 -left-32 w-96 h-96 bg-teal-200 opacity-20 rounded-full blur-3xl"></div>
       <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-200 opacity-20 rounded-full blur-3xl"></div>
 
-      {/* Signup Card */}
       <div className="relative w-full sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-1/3 bg-white/95 backdrop-blur-sm shadow-xl rounded-2xl p-8 z-10">
-        {/* Branding */}
         <div className="text-center mb-6">
           <h1 className="text-3xl font-extrabold text-yellow-300">
             <Link to="/">SwiftPay</Link>
@@ -97,10 +94,7 @@ const Register = () => {
           <p className="mb-4 text-sm text-red-600 font-medium">{error}</p>
         ) : null}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Inputs... */}
-          {/* Full Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Full Name
