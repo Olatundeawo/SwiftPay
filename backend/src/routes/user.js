@@ -40,13 +40,15 @@ export default function (prisma) {
         where: { email },
       });
       if (!oldUser) {
-        return res.status(409).json({ success: false, error: "Check email" });
+        return res
+          .status(409)
+          .json({ success: false, error: "User not found" });
       }
       const passwordCompare = await bcrypt.compare(password, oldUser.password);
       if (!passwordCompare) {
         return res
           .status(409)
-          .json({ success: false, error: "password mismatch" });
+          .json({ success: false, error: "Incorrect password" });
       }
 
       const token = jwt.sign(

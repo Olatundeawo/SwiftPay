@@ -10,6 +10,7 @@ const Merchant = () => {
   const [QRImages, setQRImages] = useState("");
   const [data, setData] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +34,7 @@ const Merchant = () => {
 
   const generateQR = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const qrCode = await fetch("http://localhost:3000/dashboard/qr", {
@@ -56,6 +58,8 @@ const Merchant = () => {
       setAmount("");
     } catch (err) {
       setError(err.error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -190,7 +194,20 @@ const Merchant = () => {
               onClick={generateQR}
               className="px-6 py-3 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 transition w-full md:w-auto font-medium"
             >
-              Generate QR Code
+              {loading ? (
+                <>
+                  <ClipLoader
+                    color={color}
+                    loading={load}
+                    size={20}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                  <span className="ml-2">Generating...</span>
+                </>
+              ) : (
+                "Generate QR Code"
+              )}
             </button>
           </div>
 

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import logo from "../swiftpay-wordmark.svg";
 
 const User = () => {
   const [user, setUser] = useState("");
@@ -48,6 +49,7 @@ const User = () => {
   }, [status, error]);
 
   const addFund = async (e) => {
+    setLoading(true);
     try {
       e.preventDefault();
       const token = localStorage.getItem("token");
@@ -68,6 +70,8 @@ const User = () => {
       fetchData();
     } catch (err) {
       console.error(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -157,10 +161,9 @@ const User = () => {
       if (!transaction.ok) {
         setError(response.error);
       }
-      console.log(response.sentTxs.map((dat) => dat.merchant.name));
+
       setStatus(response.message);
       setData(response.sentTxs);
-      console.log("The our", typeof data);
     } catch (err) {
       setError(err.message);
     }
@@ -216,7 +219,7 @@ const User = () => {
             onClick={() => setOpen(true)}
             className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md transition active:scale-95"
           >
-            Add Fund
+            Add fund
           </button>
 
           {/* Modal */}
@@ -245,8 +248,22 @@ const User = () => {
                   <button
                     onClick={addFund}
                     className="flex-1 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition active:scale-95"
+                    disabled={loading}
                   >
-                    Add
+                    {loading ? (
+                      <>
+                        <ClipLoader
+                          color={color}
+                          loading={load}
+                          size={20}
+                          aria-label="Loading Spinner"
+                          data-testid="loader"
+                        />
+                        <span className="ml-2">Funding...</span>
+                      </>
+                    ) : (
+                      "Add Fund"
+                    )}
                   </button>
                   <button
                     onClick={() => setOpen(false)}
@@ -391,14 +408,15 @@ const User = () => {
           </div>
         </div>
       ) : (
-        <ClipLoader
-          color={color}
-          loading={load}
-          // cssOverride={override}
-          size={200}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
+        <div className="flex flex-col items-center space-y-4">
+          {/* Your image */}
+          <img
+            src={logo}
+            alt="Loading..."
+            className="w-32 h-32 animate-pulse"
+          />
+          <p className="text-gray-600 font-medium">Loading, please wait...</p>
+        </div>
       )}
     </div>
   );

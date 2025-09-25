@@ -42,17 +42,17 @@ export default function (prisma) {
         });
       }
 
+      if (merchantQR.status === "USED") {
+        return res.status(200).json({
+          success: true,
+          message: "Transaction has been completed",
+        });
+      }
+
       if (user.walletBalance < amount) {
         return res
           .status(400)
           .json({ success: false, error: "Insufficient funds." });
-      }
-
-      if (merchantQR.status === "USED") {
-        return res.status(400).json({
-          success: true,
-          message: "Transaction has been completed",
-        });
       }
 
       const [updatedUser, updatedMerchant, updatedQRCode, transaction] =
@@ -96,7 +96,7 @@ export default function (prisma) {
     }
   });
 
-  router.post("/fund", async (req, res) => {
+  router.post("/fund", async (req, res, next) => {
     try {
       const { id } = req.user;
       const { amount } = req.body;

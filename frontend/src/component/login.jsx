@@ -70,7 +70,7 @@ const Login = () => {
       });
     } catch (err) {
       console.error("server error", err);
-      setError(`${err}, Checking your network connection.`);
+      setError(`${err.message}, please try again.`);
     } finally {
       setLoading(false);
     }
