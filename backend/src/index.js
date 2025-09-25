@@ -19,7 +19,7 @@ const prisma = new PrismaClient();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://swiftpay-3jzn.onrender.com"],
+    origin: ["http://localhost:5173", "https://app-swiftpay.onrender.com"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
