@@ -12,6 +12,8 @@ const Merchant = () => {
   const [data, setData] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [load, setLoad] = useState(true);
+  const [color, setColor] = useState("#ffffff");
 
   useEffect(() => {
     const fetchData = async () => {
