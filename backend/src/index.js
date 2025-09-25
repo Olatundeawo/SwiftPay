@@ -7,6 +7,7 @@ import dashboard from "./routes/dashboard.js";
 import payments from "./routes/payments.js";
 import authMiddleware from "./middleware/authMiddleware.js";
 import transaction from "./routes/transaction.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 dotenv.config();
 
@@ -22,11 +23,8 @@ app.use("/", user(prisma));
 app.use("/dashboard", authMiddleware, dashboard(prisma));
 app.use("/api", authMiddleware, payments(prisma));
 app.use("/transaction", authMiddleware, transaction(prisma));
-// app.get("/dashboard", authMiddleware, (req, res) => {
-//   res.json({
-//     message: `Welcome to the ${req.user.role} dashboard, your email is ${req.user.email}`,
-//   });
-// });
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 

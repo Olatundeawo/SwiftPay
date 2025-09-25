@@ -5,16 +5,8 @@ import QRCode from "qrcode";
 export default function (prisma) {
   const router = express.Router();
 
-  router.get("/", async (req, res) => {
+  router.get("/", async (req, res, next) => {
     try {
-      //   // Only allow merchants
-      //   if (req.user.role !== "MERCHANT") {
-      //     return res
-      //       .status(403)
-      //       .json({ success: false, error: "Not authorized" });
-      //   }
-
-      // Fetch user details (exclude password for safety)
       const user = await prisma.user.findUnique({
         where: { id: req.user.id },
         select: {
@@ -39,12 +31,11 @@ export default function (prisma) {
         user,
       });
     } catch (err) {
-      console.error(err);
-      return res.status(500).json({ success: false, error: "Server error" });
+      next(err);
     }
   });
 
-  router.post("/qr", async (req, res) => {
+  router.post("/qr", async (req, res, next) => {
     try {
       const { id } = req.user;
       const { amount } = req.body;
@@ -87,11 +78,11 @@ export default function (prisma) {
         qrRecord,
       });
     } catch (err) {
-      return res.status(500).json({ error: err.message });
+      next(err);
     }
   });
 
-  router.get("/qr", async (req, res) => {
+  router.get("/qr", async (req, res, next) => {
     try {
       const qrRecord = await prisma.merchantQR.findMany({
         where: { merchantId: req.user.id },
@@ -124,7 +115,7 @@ export default function (prisma) {
         .status(200)
         .json({ success: true, message: "QRCode", qrcode: qrImages, qrRecord });
     } catch (err) {
-      return res.status(500).json({ Error: err });
+      next(err);
     }
   });
 

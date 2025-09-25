@@ -3,7 +3,7 @@ import express from "express";
 export default function (prisma) {
   const router = express.Router();
 
-  router.post("/payment", async (req, res) => {
+  router.post("/payment", async (req, res, next) => {
     try {
       const { id } = req.user;
       const { merchantId, qrId, amount } = req.body;
@@ -92,7 +92,7 @@ export default function (prisma) {
         transaction,
       });
     } catch (err) {
-      return res.status(500).json({ error: err.message });
+      next(err);
     }
   });
 
@@ -113,7 +113,7 @@ export default function (prisma) {
         .status(200)
         .json({ success: true, message: "Fund succesffuly added" }, user);
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      next(err);
     }
   });
 

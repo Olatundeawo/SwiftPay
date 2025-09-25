@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 export default function (prisma) {
   const router = express.Router();
 
-  router.post("/signup", async (req, res) => {
+  router.post("/signup", async (req, res, next) => {
     try {
       const { name, email, password, role } = req.body;
 
@@ -28,11 +28,11 @@ export default function (prisma) {
       res.json({ success: true, message: "User succesfully created", newUser });
     } catch (err) {
       console.error("Server error", err);
-      return res.status(500).json({ success: false, error: err.message });
+      next(err);
     }
   });
 
-  router.post("/login", async (req, res) => {
+  router.post("/login", async (req, res, next) => {
     try {
       const { email, password } = req.body;
 
@@ -69,7 +69,7 @@ export default function (prisma) {
       });
     } catch (err) {
       console.error("Server error", err);
-      return res.status(500).json({ success: false, error: err.message });
+      next(err);
     }
   });
 
