@@ -7,7 +7,7 @@ import User from "./userDashboard";
 import Merchant from "./merchantDashboar";
 import About from "./about";
 import PrivateRoute from "./authGuard";
-import Notfound from "../../../../frontend/src/components/Notfound";
+import Notfound from "./Notfound";
 
 const Routing = () => {
   return (
