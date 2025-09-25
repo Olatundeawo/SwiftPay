@@ -151,7 +151,7 @@ const User = () => {
     try {
       const token = localStorage.getItem("token");
       const transaction = await fetch(
-        "https://swiftpay-2tot.onrender.com/details",
+        "https://swiftpay-2tot.onrender.com/transaction/details",
         {
           method: "GET",
           headers: {
